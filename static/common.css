@@ -1,0 +1,49 @@
+body {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: 'Brandon Grotesque';
+  letter-spacing: 2px;
+
+}
+
+@font-face {
+  font-family: 'Brandon Grotesque';
+  src: url('./fonts/brandon_blk-webfont.eot');
+  src: url('./fonts/brandon_blk-webfont.eot?#iefix') format('embedded-opentype'),
+       url('./fonts/brandon_blk-webfont.woff2') format('woff2'),
+       url('./fonts/brandon_blk-webfont.woff') format('woff'),
+       url('./fonts/brandon_blk-webfont.ttf') format('truetype'),
+       url('./fonts/brandon_blk-webfont.svg#brandon_blk-webfont') format('svg');
+  font-weight: normal;
+  font-style: normal;
+
+}
+#debug {
+  position: absolute;
+  top:0;
+  left: 0;
+  margin: 0;
+  padding: 20px;
+  color:white;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+.instruction {
+  position: absolute;
+  z-index: 10;
+  bottom:0;
+  left:0;
+  margin: 0;
+  padding: 20px;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+.instruction.light {
+  color: #ededed;
+}
+.instruction.dark {
+  color: #2d2d2d;
+}
