@@ -15,14 +15,12 @@ void main() {
       vec4 opos = texture2D(origin, vUv);
       vec4 pos = texture2D(tPositions, vUv);
       vec4 infos = texture2D(tInfos, vUv);
-      vec3 yo = mouse - opos.xyz;
-      if(length(yo) < 10.0 + infos.x) {
+      vec3 f = mouse - opos.xyz;
+      if(length(f) < 10.0 + infos.x) {
         pos.xyz -= (pos.xyz - mouse.xyz) * infos.y;
       } else {
         pos.xyz += (opos.xyz - pos.xyz) * infos.z;
       }
-
-
 
       gl_FragColor = vec4(pos.xyz,1.0);
 }

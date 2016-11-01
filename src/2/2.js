@@ -7,7 +7,7 @@ import Instruction from '../utils/Instruction';
 import 'gsap';
 console.warn = function yolo() {};
 // Vars
-window.DEBUG = true;
+window.DEBUG = false;
 let device;
 let webGL;
 let instruction;
@@ -68,7 +68,7 @@ domReady(() => {
   // WebGL
   webGL = new WebGL({
     device,
-    name: 'EXPERIMENT',
+    name: 'Day 2',
     postProcessing: true,
     size: {
       width: window.innerWidth,
@@ -80,9 +80,11 @@ domReady(() => {
         move: true,
         click: true,
       },
-      touch: {},
+      touch: {
+        move: true,
+      },
     },
-    controls: true,
+    controls: false,
   });
   document.body.appendChild(webGL.renderer.domElement);
   instruction = new Instruction({ text: 'Day 2: Move your mouse | Click to change color', style: 'light' });

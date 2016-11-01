@@ -25,11 +25,20 @@ export default class WebGl extends AbstractWebGL {
   super.mouseMove(x,y,time);
   this.rayCast();
   }
+  touchMove(touchList) {
+    const touch = touchList[0];
+    this.originalMouse.x = touchList[0].clientX;
+    this.originalMouse.y = touchList[0].clientY;
+    this.mouse.x = (touchList[0].clientX / window.innerWidth - 0.5) * 2;
+    this.mouse.y = (touchList[0].clientY / window.innerHeight - 0.5) * 2;
+    this.rayCast();
+  }
   initPostprocessing() {
     super.initPostprocessing();
     this.noisePass.params.speed = 1;
     this.noisePass.params.amount = 0.05;
-    this.vignettePass.params.reduction = 0.8;
+    this.vignettePass.params.reduction = this.params.device === 'desktop' ? 0.8 : 0.3;
+
   }
   initObjects() {
 
