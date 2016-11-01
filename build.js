@@ -54,10 +54,11 @@ function runBuild (f) {
     })
     b.bundle(function (err, src) {
       if (err) return reject(err)
-      console.log('Compressing', f)
-      var result = UglifyJS.minify(src.toString(), { fromString: true })
+      // console.log('Compressing', f)
+      // var result = UglifyJS.minify(src.toString(), { fromString: true })
       console.log('Writing', f)
-      fs.writeFile('static/' + f, result.code, function (err) {
+      fs.writeFile('static/' + f, src, function (err) {
+      // fs.writeFile('static/' + f, result.code, function (err) {
         if (err) return reject(err)
         resolve()
       })

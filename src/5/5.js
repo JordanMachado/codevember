@@ -3,13 +3,12 @@ import deviceType from 'ua-device-type';
 import domReady from 'domready';
 import raf from 'raf';
 import dat from 'dat-gui';
-import URL from '../utils/Url';
 import Instruction from '../utils/Instruction';
 
 import 'gsap';
 console.warn = function() {}
 // Vars
-window.DEBUG = false;
+window.DEBUG = true;
 let device;
 let webGL;
 let instruction;
@@ -61,7 +60,6 @@ function touchMove(e) {
 }
 
 domReady(() => {
-
   device = deviceType(navigator.userAgent);
   document.querySelector('html').classList.add(device);
 
@@ -71,7 +69,7 @@ domReady(() => {
   // WebGL
   webGL = new WebGL({
     device,
-    name: 'DAY 1',
+    name: 'EXPERIMENT',
     postProcessing: true,
     size: {
       width: window.innerWidth,
@@ -82,11 +80,9 @@ domReady(() => {
       mouse: {
         move: true,
       },
-      touch: {
-        move: true,
-      },
+      touch: {},
     },
-    controls: false,
+    controls: true,
   });
   document.body.appendChild(webGL.renderer.domElement);
 

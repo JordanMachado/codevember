@@ -1,15 +1,22 @@
 import AbstractWebGL from '../AbstractWebGL';
+import AttractPoint from './AttractPoint';
 import ParticleSystem from './ParticleSystem';
 
 const THREE = require('three');
-window.THREE = THREE;
+// window.THREE = THREE;
+
+const RGB = require('@superguigui/wagner/src/passes/rgbsplit/rgbsplit');
+const Tilt = require('@superguigui/wagner/src/passes/tiltshift/tiltshiftPass');
+const Bloom = require('@superguigui/wagner/src/passes/bloom/MultiPassBloomPass');
+
+
 
 export default class WebGl extends AbstractWebGL {
   constructor(params) {
     super(params);
     this.mouseWorldPosition = new THREE.Vector3();
-    this.renderer.setClearColor(0xe8e8e8);
-
+    this.renderer.setClearColor(0x1e1e1e);
+    this.camera.position.z = 10;
 
 
   }
@@ -19,25 +26,32 @@ export default class WebGl extends AbstractWebGL {
     if (intersects.length > 0) {
       this.mouseWorldPosition.x = intersects[0].point.x;
       this.mouseWorldPosition.y = -intersects[0].point.y;
+      // this.particleSystem.updateMouse(this.mouseWorldPosition)
     }
   }
   mouseMove(x, y, time) {
-    super.mouseMove(x, y, time);
-    this.rayCast();
-  }
-  touchMove(touchList) {
-    const touch = touchList[0];
-    this.originalMouse.x = touchList[0].clientX;
-    this.originalMouse.y = touchList[0].clientY;
-    this.mouse.x = (touchList[0].clientX / window.innerWidth - 0.5) * 2;
-    this.mouse.y = (touchList[0].clientY / window.innerHeight - 0.5) * 2;
+    super.mouseMove(x,y,time);
     this.rayCast();
   }
   initPostprocessing() {
     super.initPostprocessing();
     this.noisePass.params.speed = 1;
     this.noisePass.params.amount = 0.05;
-    this.vignettePass.params.reduction = this.params.device === 'desktop' ? 0.8 : 0.3;
+    this.vignettePass.params.reduction = 0.8;
+
+    this.bloom = new Bloom({})
+    this.bloom.params.blendMode = 8;
+    this.bloom.params.blurAmount = 0.5;
+    this.passes.push(this.bloom);
+
+    this.rbg = new RGB({});
+    this.rbg.params.delta = new THREE.Vector2(50, 50);
+    this.rbg.params.brightness = 1.05;
+
+    this.passes.push(this.rbg);
+
+    this.tilt = new Tilt();
+    this.passes.push(this.tilt);
   }
   initObjects() {
 
@@ -49,6 +63,15 @@ export default class WebGl extends AbstractWebGL {
     this.planeRay.material.visible = false;
     this.scene.add(this.planeRay);
 
+    this.attractPoint = [];
+    const geom2 = new THREE.SphereBufferGeometry(1, 10, 10);
+
+    for (let i = 0; i < 10; i++) {
+      const reperl = new AttractPoint({ geom: geom2 });
+      this.attractPoint.push(reperl);
+      // this.scene.add(reperl);
+    }
+
     const loader = new THREE.FontLoader();
     loader.load('static/fonts/Brandon Grotesque Regular_Regular.js', (font) => {
       const geom = new THREE.TextGeometry('# CODEVEMBER', {
@@ -57,15 +80,16 @@ export default class WebGl extends AbstractWebGL {
         height: 1,
       });
 
-      this.particleSystem = new ParticleSystem(this.renderer, this.scene, geom);
+      this.particleSystem = new ParticleSystem(this.renderer, this.scene, geom, this.attractPoint);
       this.particleSystem.position.set(0, 0, 0);
       this.scene.add(this.particleSystem);
     });
+
   }
   render() {
     super.render();
-    this.camera.position.x += ((this.mouse.x * 30) - this.camera.position.x) * 0.1;
-    this.camera.position.y += ((this.mouse.y * 30) - this.camera.position.y) * 0.1;
+    // this.camera.position.x += ((this.mouse.x * 100) - this.camera.position.x) * 0.1;
+    // this.camera.position.y += ((this.mouse.y * 100) - this.camera.position.y) * 0.1;
     this.camera.lookAt(this.scene.position);
     if (this.particleSystem) this.particleSystem.update(this.mouseWorldPosition);
   }

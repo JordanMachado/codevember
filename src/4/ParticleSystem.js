@@ -6,16 +6,25 @@ window.THREE = THREE;
 
 
 export default class ParticleSystem extends THREE.Object3D {
-  constructor(renderer, scene, geom) {
+  constructor(renderer, scene, geom, attractPoints) {
     super();
+
+
+    this.reperlerCenter = [];
+    this.reperlersForce = [];
+    for (let i = 0; i < attractPoints.length; i++) {
+      this.reperlerCenter.push(attractPoints[i].mesh.position);
+      this.reperlersForce.push(attractPoints[i].repulsion);
+    }
 
     const width = 256;
     const height = 256;
     this.dataPos = new Float32Array(width * height * 4);
-    this.datatest = new Float32Array(width * height * 4);
+    this.datatInfos = new Float32Array(width * height * 4);
     this.dataVel = new Float32Array(width * height * 4);
-
-    const points = THREE.GeometryUtils.randomPointsInGeometry(geom, this.dataPos.length / 3);
+    console.log(geom);
+    window.geom = geom;
+    let points = THREE.GeometryUtils.randomPointsInGeometry(geom, this.dataPos.length / 3);
     this.geom = new THREE.Geometry();
     this.geom = new THREE.BufferGeometry();
 
@@ -40,17 +49,23 @@ export default class ParticleSystem extends THREE.Object3D {
       // this.dataPos[i + 1] = ((count / width) / height - 0.5) * height;
       // this.dataPos[i + 2] = 0;
 
-      this.dataPos[i] = points[count].x - geom.boundingBox.max.x / 2;
-      this.dataPos[i + 1] = points[count].y - geom.boundingBox.max.y / 2;
-      this.dataPos[i + 2] = points[count].z;
+      this.dataPos[count * 3 + 0] = ((count % width) / width - 0.5) * width;
+      this.dataPos[count * 3 + 1] = ((count / width) / height - 0.5) * height;
+      this.dataPos[count * 3 + 2] = 0;
 
-      this.datatest[i] = this.dataPos[i] + (Math.random() * (10 + 10) - 10);
-      this.datatest[i + 1] = this.dataPos[i + 1] + (Math.random() * (10 + 10) - 10);
-      this.datatest[i + 2] = this.dataPos[i + 2] + (Math.random() * (10 + 10) - 10);
+      // this.dataPos[i] = points[count].x  - geom.boundingBox.max.x / 2;
+      // this.dataPos[i + 1] = points[count].y - geom.boundingBox.max.y / 2;
+      // this.dataPos[i + 2] = points[count].z;
 
-      this.dataVel[i] = 0.0001;
-      this.dataVel[i + 1] = 0.0001;
-      this.dataVel[i + 2] = 0.0001;
+      size[count * 3] = Math.random() * 30;
+
+      this.datatInfos[i] = size[count * 3];
+      this.datatInfos[i + 1] = this.dataPos[i + 1] + (Math.random() * (10 + 10 ) - 10);
+      this.datatInfos[i + 2] = this.dataPos[i + 2] + (Math.random() * (10 + 10 ) - 10);
+
+      this.dataVel[count * 3 + 0] = 0;
+      this.dataVel[count * 3 + 1] = 0;
+      this.dataVel[count * 3 + 2] = 0;
 
       uvs[count * 2 + 0] = (count % width) / width;
       uvs[count * 2 + 1] = Math.floor(count / width) / height;
@@ -61,7 +76,6 @@ export default class ParticleSystem extends THREE.Object3D {
       colors[count * 3 + 1] = color[1] / 255;
       colors[count * 3 + 2] = color[2] / 255;
 
-      size[count * 3] = Math.random() * 3;
 
       vertices[count * 3 + 0] = this.dataPos[i];
       vertices[count * 3 + 1] = this.dataPos[i + 1];
@@ -77,16 +91,16 @@ export default class ParticleSystem extends THREE.Object3D {
     this.textureDataPos = new THREE.DataTexture(
       this.dataPos, width, height, THREE.RGBAFormat, THREE.FloatType);
 
-    this.textureDataPostest = new THREE.DataTexture(
-      this.datatest, width, height, THREE.RGBAFormat, THREE.FloatType);
+      this.textureDataInfos = new THREE.DataTexture(
+        this.datatInfos, width, height, THREE.RGBAFormat, THREE.FloatType);
 
     this.textureDataPos.minFilter = THREE.NearestFilter;
     this.textureDataPos.magFilter = THREE.NearestFilter;
     this.textureDataPos.needsUpdate = true;
 
-    this.textureDataPostest.minFilter = THREE.NearestFilter;
-    this.textureDataPostest.magFilter = THREE.NearestFilter;
-    this.textureDataPostest.needsUpdate = true;
+    this.textureDataInfos.minFilter = THREE.NearestFilter;
+    this.textureDataInfos.magFilter = THREE.NearestFilter;
+    this.textureDataInfos.needsUpdate = true;
 
     this.textureDataVel = new THREE.DataTexture(
       this.dataVel, width, height, THREE.RGBAFormat, THREE.FloatType);
@@ -130,7 +144,7 @@ export default class ParticleSystem extends THREE.Object3D {
         },
         tPositionstest: {
           type: 't',
-          value: this.textureDataPostest,
+          value: this.textureDataInfos,
         },
         tVelocity: {
           type: 't',
@@ -145,8 +159,8 @@ export default class ParticleSystem extends THREE.Object3D {
           value: this.textureDataPos,
         },
       },
-      vertexShader: glslify('../shaders/1/simulation.vert'),
-      fragmentShader: glslify('../shaders/1/position.frag'),
+      vertexShader: glslify('../shaders/4/simulation.vert'),
+      fragmentShader: glslify('../shaders/4/position.frag'),
     });
 
     this.velocityShader = new THREE.ShaderMaterial({
@@ -154,6 +168,10 @@ export default class ParticleSystem extends THREE.Object3D {
         tVelocity: {
           type: 't',
           value: this.textureDataVel,
+        },
+        tInfos: {
+          type: 't',
+          value: this.textureDataInfos,
         },
         tPositions: {
           type: 't',
@@ -167,9 +185,17 @@ export default class ParticleSystem extends THREE.Object3D {
           type: 't',
           value: this.textureDataVel,
         },
+        reperlerCenter: {
+          type: 'v3v',
+          value: this.reperlerCenter,
+        },
+        reperlersForce: {
+          type: 'fv1',
+          value: this.reperlersForce,
+        },
       },
-      vertexShader: glslify('../shaders/1/simulation.vert'),
-      fragmentShader: glslify('../shaders/1/velocity.frag'),
+      vertexShader: glslify('../shaders/4/simulation.vert'),
+      fragmentShader: glslify('../shaders/4/velocity.frag'),
     });
     this.positionsFBO = new THREE.FBOUtils(width, renderer, this.positionShader);
     this.positionsFBO.renderToTexture(this.rtTexturePos, this.rtTexturePos2);
@@ -201,9 +227,9 @@ export default class ParticleSystem extends THREE.Object3D {
     };
     this.mat = new THREE.ShaderMaterial({
       uniforms: this.uniforms,
-      vertexShader: glslify('../shaders/1/index.vert'),
-      fragmentShader: glslify('../shaders/1/index.frag'),
-      // blending: THREE.AdditiveBlending,
+      vertexShader: glslify('../shaders/4/index.vert'),
+      fragmentShader: glslify('../shaders/4/index.frag'),
+      blending: THREE.AdditiveBlending,
       transparent: true,
     });
 
