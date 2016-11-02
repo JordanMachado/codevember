@@ -30,6 +30,14 @@ export default class WebGl extends AbstractWebGL {
     super.mouseMove(x,y,time);
     this.rayCast();
   }
+  touchMove(touchList) {
+    const touch = touchList[0];
+    this.originalMouse.x = touchList[0].clientX;
+    this.originalMouse.y = touchList[0].clientY;
+    this.mouse.x = (touchList[0].clientX / window.innerWidth - 0.5) * 2;
+    this.mouse.y = (touchList[0].clientY / window.innerHeight - 0.5) * 2;
+    this.rayCast();
+  }
   initPostprocessing() {
     super.initPostprocessing();
     this.noisePass.params.speed = 1;
@@ -66,12 +74,11 @@ export default class WebGl extends AbstractWebGL {
   render() {
     super.render();
     this.plane.update();
-    // this.camera.position.x += ((this.mouse.x * 5) - this.camera.position.x) * 0.05;
-    // this.camera.position.y += ((this.mouse.y * 5) - this.camera.position.y) * 0.05;
+    this.camera.position.x += ((this.mouse.x * 5) - this.camera.position.x) * 0.05;
+    this.camera.position.y += ((this.mouse.y * 5) - this.camera.position.y) * 0.05;
     this.camera.lookAt(this.scene.position);
 
   }
   click() {
-    this.particleSytem.click();
   }
 }
