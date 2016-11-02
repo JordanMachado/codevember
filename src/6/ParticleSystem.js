@@ -6,7 +6,7 @@ window.THREE = THREE;
 
 
 export default class ParticleSystem extends THREE.Object3D {
-  constructor(renderer, scene, attractPoints) {
+  constructor(renderer, scene) {
     super();
 
     const width = 10;
