@@ -70,25 +70,15 @@ export default class WebGl extends AbstractWebGL {
       this.attractPoint.push(reperl);
       // this.scene.add(reperl);
     }
-
-    const loader = new THREE.FontLoader();
-    loader.load('static/fonts/Brandon Grotesque Regular_Regular.js', (font) => {
-      const geom = new THREE.TextGeometry('# CODEVEMBER', {
-        font,
-        size: 10,
-        height: 1,
-      });
-
-      this.particleSystem = new ParticleSystem(this.renderer, this.scene, geom, this.attractPoint);
-      this.particleSystem.position.set(0, 0, 0);
-      this.scene.add(this.particleSystem);
-    });
+    this.particleSystem = new ParticleSystem(this.renderer, this.scene, this.attractPoint);
+    this.particleSystem.position.set(0, 0, 0);
+    this.scene.add(this.particleSystem);
 
   }
   render() {
     super.render();
-    this.camera.position.x += ((this.mouse.x * 100) - this.camera.position.x) * 0.1;
-    this.camera.position.y += ((this.mouse.y * 100) - this.camera.position.y) * 0.1;
+    this.camera.position.x += ((this.mouse.x * 150) - this.camera.position.x) * 0.01;
+    this.camera.position.y += ((this.mouse.y * 150) - this.camera.position.y) * 0.01;
     this.camera.lookAt(this.scene.position);
     if (this.particleSystem) this.particleSystem.update(this.mouseWorldPosition);
   }

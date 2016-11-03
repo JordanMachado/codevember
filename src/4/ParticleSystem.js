@@ -6,7 +6,7 @@ window.THREE = THREE;
 
 
 export default class ParticleSystem extends THREE.Object3D {
-  constructor(renderer, scene, geom, attractPoints) {
+  constructor(renderer, scene, attractPoints) {
     super();
 
 
@@ -22,10 +22,6 @@ export default class ParticleSystem extends THREE.Object3D {
     this.dataPos = new Float32Array(width * height * 4);
     this.datatInfos = new Float32Array(width * height * 4);
     this.dataVel = new Float32Array(width * height * 4);
-    console.log(geom);
-    window.geom = geom;
-    let points = THREE.GeometryUtils.randomPointsInGeometry(geom, this.dataPos.length / 3);
-    this.geom = new THREE.Geometry();
     this.geom = new THREE.BufferGeometry();
 
     const vertices = new Float32Array(width * height * 3);
@@ -42,7 +38,6 @@ export default class ParticleSystem extends THREE.Object3D {
       '007EA7',
       '00A8E8',
     ];
-    geom.computeBoundingBox();
     for (let i = 0, l = width * height * 4; i < l; i += 4) {
       //
       // this.dataPos[i] = ((count % width) / width - 0.5) * width;
@@ -91,8 +86,8 @@ export default class ParticleSystem extends THREE.Object3D {
     this.textureDataPos = new THREE.DataTexture(
       this.dataPos, width, height, THREE.RGBAFormat, THREE.FloatType);
 
-      this.textureDataInfos = new THREE.DataTexture(
-        this.datatInfos, width, height, THREE.RGBAFormat, THREE.FloatType);
+    this.textureDataInfos = new THREE.DataTexture(
+      this.datatInfos, width, height, THREE.RGBAFormat, THREE.FloatType);
 
     this.textureDataPos.minFilter = THREE.NearestFilter;
     this.textureDataPos.magFilter = THREE.NearestFilter;
