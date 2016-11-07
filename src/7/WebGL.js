@@ -31,6 +31,18 @@ export default class WebGl extends AbstractWebGL {
       // this.particleSystem.updateMouse(this.mouseWorldPosition)
     }
   }
+  click(x, y, time) {
+    super.click(x, y, time);
+    for (var i = 0; i < this.cubes.length; i++) {
+      const time = Math.random() * (1 - 0.5) + 0.5;
+      TweenLite.to(this.cubes[i].position, time,{
+        x: Math.random() * (40 + 40) - 40,
+        y: Math.random() * (40 + 40) - 40,
+        z: Math.random() * (40 + 40) - 40,
+        ease: Quad.easeOut
+      })
+    }
+  }
   mouseMove(x, y, time) {
     super.mouseMove(x,y,time);
     this.rayCast();
@@ -65,7 +77,7 @@ export default class WebGl extends AbstractWebGL {
     this.planeRay.material.visible = false;
     this.scene.add(this.planeRay);
 
-    const cubes = [];
+    const cubes = this.cubes = [];
     const colors = [
       '#FF2712', // red
       '#FFFF33',
