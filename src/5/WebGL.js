@@ -63,27 +63,13 @@ export default class WebGl extends AbstractWebGL {
     this.planeRay.material.visible = false;
     this.scene.add(this.planeRay);
 
-    this.attractPoint = [];
     const geom2 = new THREE.SphereBufferGeometry(1, 10, 10);
 
-    for (let i = 0; i < 10; i++) {
-      const reperl = new AttractPoint({ geom: geom2 });
-      this.attractPoint.push(reperl);
-      // this.scene.add(reperl);
-    }
 
-    const loader = new THREE.FontLoader();
-    loader.load('static/fonts/Brandon Grotesque Regular_Regular.js', (font) => {
-      const geom = new THREE.TextGeometry('# CODEVEMBER', {
-        font,
-        size: 10,
-        height: 1,
-      });
+    this.particleSystem = new ParticleSystem(this.renderer, this.scene);
+    this.particleSystem.position.set(0, 0, 0);
+    this.scene.add(this.particleSystem);
 
-      this.particleSystem = new ParticleSystem(this.renderer, this.scene, geom, this.attractPoint);
-      this.particleSystem.position.set(0, 0, 0);
-      this.scene.add(this.particleSystem);
-    });
 
   }
   render() {

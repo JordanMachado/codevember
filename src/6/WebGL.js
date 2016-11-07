@@ -51,6 +51,7 @@ export default class WebGl extends AbstractWebGL {
 
     this.tilt = new Tilt();
     this.passes.push(this.tilt);
+    this.enablePass();
   }
   initObjects() {
 
