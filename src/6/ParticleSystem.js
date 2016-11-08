@@ -75,6 +75,7 @@ export default class ParticleSystem extends THREE.Object3D {
     });
 
     this.mesh = new THREE.Line(geom, this.mat);
+    this.mesh.rotation.x = Math.PI / 180 * -60;
     this.add(this.mesh);
     this.tick = 0;
   }

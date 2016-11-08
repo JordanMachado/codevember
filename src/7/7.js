@@ -8,7 +8,7 @@ import Instruction from '../utils/Instruction';
 import 'gsap';
 console.warn = function() {}
 // Vars
-window.DEBUG = true;
+window.DEBUG = false;
 let device;
 let webGL;
 let instruction;
@@ -79,6 +79,7 @@ domReady(() => {
       keyboard: {},
       mouse: {
         move: true,
+        click: true,
       },
       touch: {},
     },
@@ -86,7 +87,7 @@ domReady(() => {
   });
   document.body.appendChild(webGL.renderer.domElement);
 
-  instruction = new Instruction({ text: 'Day 7: Mondrian', style: 'light' });
+  instruction = new Instruction({ text: 'Day 7: inspiration Mondrian | Click to randomize', style: 'light' });
   instruction.add();
 
 

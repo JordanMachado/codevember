@@ -33,6 +33,7 @@
     "konami-js": "0.0.2",
     "open": "0.0.5",
     "path": "^0.12.7",
+    "perlin-simplex": "0.0.2",
     "querystringparser": "^0.1.1",
     "raf": "*",
     "simple-html-index": "^1.5.0",
