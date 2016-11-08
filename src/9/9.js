@@ -8,7 +8,7 @@ import Instruction from '../utils/Instruction';
 import 'gsap';
 console.warn = function() {}
 // Vars
-window.DEBUG = true;
+window.DEBUG = false;
 let device;
 let instruction;
 let canvas;
@@ -44,7 +44,7 @@ domReady(() => {
   if (window.DEBUG || window.DEVMODE) {
     window.gui = new dat.GUI();
   }
-  instruction = new Instruction({ text: 'Day 9', style: 'light' });
+  instruction = new Instruction({ text: 'Day 9: Simplex noise', style: 'light' });
   instruction.add();
 
   // let's start
