@@ -8,7 +8,7 @@ import Instruction from '../utils/Instruction';
 import 'gsap';
 console.warn = function() {}
 // Vars
-window.DEBUG = true;
+window.DEBUG = false;
 let device;
 let webGL;
 let instruction;

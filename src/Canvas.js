@@ -20,6 +20,7 @@ export default class Canvas {
   xp() {
     this.x = 0;
     this.y = 0;
+    // this.ctx.fillStyle='#'+Math.floor(Math.random()*16777215).toString(16);
   }
   render() {
     let yo = simplex.noise(this.x, this.y)
@@ -29,6 +30,7 @@ export default class Canvas {
 
     for (var i = 0; i < 40; i++) {
       this.ctx.globalAlpha = 0.01 * i;
+
       this.ctx.fillRect(this.x, i * this.h / 40 + this.y,10,i);
     }
     this.ctx.globalAlpha = 1;
@@ -37,6 +39,8 @@ export default class Canvas {
     console.log('click', x,y);
     this.x = 0;
     this.y = 0;
+    // this.ctx.fillStyle='#'+Math.floor(Math.random()*16777215).toString(16);
+
   }
   resize () {
     this.el.width = window.innerWidth;
