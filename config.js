@@ -7,6 +7,7 @@ module.exports = {
   '6': ['glslify'],
   '7': ['glslify'],
   '8': ['glslify'],
+  '10': ['glslify'],
   '11': ['glslify'],
   '14': ['glslify'],
   '15': ['glslify'],
