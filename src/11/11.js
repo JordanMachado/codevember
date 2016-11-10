@@ -8,7 +8,7 @@ import Instruction from '../utils/Instruction';
 import 'gsap';
 console.warn = function() {}
 // Vars
-window.DEBUG = true;
+window.DEBUG = false;
 let device;
 let webGL;
 let instruction;
@@ -86,7 +86,7 @@ domReady(() => {
   });
   document.body.appendChild(webGL.renderer.domElement);
 
-  instruction = new Instruction({ text: 'Day 10', style: 'dark' });
+  instruction = new Instruction({ text: 'Day 11: Multitexturing terrain', style: 'dark' });
   instruction.add();
 
 

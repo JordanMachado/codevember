@@ -60,14 +60,14 @@ export default class Sphere extends THREE.Object3D {
       fragmentShader: glslify('../shaders/11/fragment.glsl'),
       transparent: true,
     });
-    this.geom = new THREE.PlaneBufferGeometry(100, 100, 500, 500);
+    this.geom = new THREE.PlaneBufferGeometry(250, 250, 500, 500);
     // this.geom = new THREE.SphereBufferGeometry(12, 72, 72);
 
 
     this.mesh = new THREE.Mesh(this.geom, this.mat);
-    this.mesh.rotation.x = Math.PI / 180 * -80;
-    this.mesh.position.y = -80;
-    this.mesh.add(this.light)
+    this.mesh.rotation.x = Math.PI / 180 * -90;
+    this.mesh.position.y = -10;
+    // this.mesh.add(this.light)
 
     this.add(this.mesh);
 

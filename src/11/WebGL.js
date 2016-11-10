@@ -14,9 +14,9 @@ export default class WebGl extends AbstractWebGL {
   constructor(params) {
     super(params);
     this.mouseWorldPosition = new THREE.Vector3();
-    this.renderer.setClearColor(0x8b8f96);
+    this.renderer.setClearColor(0xffffff);
 
-    this.camera.position.z = 80;
+    this.camera.position.z = 120;
     window.webGL = this;
 
   }
@@ -51,9 +51,9 @@ export default class WebGl extends AbstractWebGL {
     this.rbg.params.brightness = 1.05;
 
     this.passes.push(this.rbg);
-
-    this.tilt = new Tilt();
-    this.passes.push(this.tilt);
+    // 
+    // this.tilt = new Tilt();
+    // this.passes.push(this.tilt);
   }
   initObjects() {
 
@@ -97,9 +97,9 @@ export default class WebGl extends AbstractWebGL {
   }
   render() {
     super.render();
-    // this.camera.position.x += ((this.mouse.x * 50) - this.camera.position.x) * 0.1;
-    // this.camera.position.y += ((this.mouse.y * 50) - this.camera.position.y) * 0.1;
-    // this.camera.lookAt(this.scene.position);
+    this.camera.position.x += ((this.mouse.x * 50) - this.camera.position.x) * 0.1;
+    this.camera.position.y += ((-this.mouse.y * 10) - this.camera.position.y) * 0.1;
+    this.camera.lookAt(this.scene.position);
     this.sphere.update();
   }
 }
